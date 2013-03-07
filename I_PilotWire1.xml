@@ -1,0 +1,263 @@
+<?xml version="1.0"?>
+<implementation>
+  <functions>
+--  Pilote your electric heating with the pilote wire
+-- 
+-- Author: Antor
+-- Date: 01/28/2012
+--
+--   You can set the following:
+--     SwitchPositive      : set of device id's with the led let pass positive signal
+--     SwitchNegative      : set of device id's with the led let pass positive signal
+
+      local PWITEM_SID = "urn:antor-fr:serviceId:PilotWire1"
+      local SWPOWER_SID = "urn:upnp-org:serviceId:SwitchPower1"
+      local DIM_SID = "urn:upnp-org:serviceId:Dimming1"
+
+      function initItem(lul_device)
+        log("Starting MetaItem device " .. tostring(lul_device))
+
+        
+        -- to initialize the variables
+        readSettings(lul_device)
+      
+        -- to sync de status with controlled item
+        sync(lul_device)
+      
+        log("Pilot Wire device started " .. tostring(lul_device))
+      
+        return true,"ok","PilotWire1"
+      end
+      
+      function readSettings(lul_device)
+        local data = {}
+      
+        data.status = readVariableOrInit(lul_device,PWITEM_SID,"Status",0)
+        data.target = readVariableOrInit(lul_device,PWITEM_SID,"Target",0)
+        data.lastStatus = readVariableOrInit(lul_device,PWITEM_SID,"Last Status",0)
+      
+        data.SwitchPositive = tonumber(readVariableOrInit(lul_device,PWITEM_SID,"SwitchPositive", ""))
+        data.SwitchNegative = tonumber(readVariableOrInit(lul_device,PWITEM_SID,"SwitchNegative", ""))
+        
+        return data
+      end
+      
+      -- COMMUN FUNCTION   
+      
+      function readVariableOrInit(lul_device, devicetype, name, defaultValue) 
+        local var = luup.variable_get(devicetype,name, lul_device)
+        if (var == nil) then
+            var = defaultValue
+            luup.variable_set(devicetype,name,var,lul_device)
+        end
+        return var
+      end
+      
+      function writeVariable(lul_device,devicetype, name, value) 
+        luup.variable_set(devicetype,name,value,lul_device)
+      end
+      
+      -- END COMMUN FUNCTION
+      
+      function getStatus(id)
+        if ( id == "") then return "0"
+        else return luup.variable_get(SWPOWER_SID,"Status", id) end
+      end
+      
+      function sync(lul_device)
+        lul_device = tonumber(lul_device)
+        local data = readSettings(lul_device)
+    
+        local SwPos = getStatus(data.SwitchPositive)
+        local SwNeg = getStatus(data.SwitchNegative)
+      
+        if (SwPos == "0" or SwPos ==nil ) and (SwNeg == "0" or SwNeg == nil) then
+            luup.variable_set(PWITEM_SID, "Target", "3", lul_device)
+            luup.variable_set(PWITEM_SID, "Status", "3", lul_device)
+        elseif SwPos == "1" and (SwNeg == "0" or SwNeg == nil) then
+            luup.variable_set(PWITEM_SID, "Target", "0", lul_device)
+            luup.variable_set(PWITEM_SID, "Status", "0", lul_device)
+        elseif (SwPos == "0" or SwPos ==nil ) and SwNeg == "1" then
+            luup.variable_set(PWITEM_SID, "Target", "1", lul_device)
+            luup.variable_set(PWITEM_SID, "Status", "1", lul_device)
+        elseif SwPos == "1" and SwNeg == "1" then
+            luup.variable_set(PWITEM_SID, "Target", "2", lul_device)
+            luup.variable_set(PWITEM_SID, "Status", "2", lul_device)
+        end
+      
+      end
+      
+
+      function SetTarget(lul_device,value)
+      
+        local data = readSettings(lul_device)
+        local lul_resultcode, lul_resultstring
+      
+        luup.call_timer("sync", 1, "1m", "", tostring(lul_device))
+              
+        if (value == 0 or value == "0" ) then
+            local lul_resultcodeP = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 1}, data.SwitchPositive)
+            local lul_resultcodeN = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 0}, data.SwitchNegative)
+      
+            if (lul_resultcodeP == -1 or lul_resultcodeN) == -1 then
+                return -1,"Wrong value" then
+            end
+            
+            MemoriseLastStatus(value,data.status)            
+                                                
+            luup.variable_set(PWITEM_SID, "Target", value, lul_device)
+            luup.variable_set(PWITEM_SID, "Status", value, lul_device)
+
+            luup.variable_set(DIM_SID, "LoadLevelTarget", "0", lul_device)
+            luup.variable_set(DIM_SID, "LoadLevelStatus", "0", lul_device)            
+            
+            return 0,"Shutdown set"
+      
+        elseif (value == 1 or value == "1" ) then
+            local lul_resultcodeP = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 0}, data.SwitchPositive)
+            local lul_resultcodeN = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 1}, data.SwitchNegative)
+      
+            if (lul_resultcodeP == -1 or lul_resultcodeN) == -1 then
+                return -1,"Wrong value" then
+            end
+      
+            MemoriseLastStatus(value,data.status)
+      
+            luup.variable_set(PWITEM_SID, "Target", value, lul_device)
+            luup.variable_set(PWITEM_SID, "Status", value, lul_device)
+            
+            luup.variable_set(DIM_SID, "LoadLevelTarget", "33", lul_device)
+            luup.variable_set(DIM_SID, "LoadLevelStatus", "33", lul_device) 
+      
+            return 0,"Frost Protection set"
+      
+        elseif (value == 2 or value == "2" ) then
+            local lul_resultcodeP = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 1}, data.SwitchPositive)
+            local lul_resultcodeN = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 1}, data.SwitchNegative)
+      
+            if (lul_resultcodeP == -1 or lul_resultcodeN) == -1 then
+                return -1,"Wrong value" then
+            end
+      
+            MemoriseLastStatus(value,data.status)
+      
+            luup.variable_set(PWITEM_SID, "Target", value, lul_device)
+            luup.variable_set(PWITEM_SID, "Status", value, lul_device)
+            
+            luup.variable_set(DIM_SID, "LoadLevelTarget", "66", lul_device)
+            luup.variable_set(DIM_SID, "LoadLevelStatus", "66", lul_device)
+      
+            return 0, "Economy set"
+      
+        elseif (value == 3 or value == "3" ) then
+            local lul_resultcodeP = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 0}, data.SwitchPositive)
+            local lul_resultcodeN = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 0}, data.SwitchNegative)
+      
+            if (lul_resultcodeP == -1 or lul_resultcodeN) == -1 then
+                return -1,"Wrong value" then
+            end
+      
+            MemoriseLastStatus(value,data.status)
+      
+            luup.variable_set(PWITEM_SID, "Target", value, lul_device)
+            luup.variable_set(PWITEM_SID, "Status", value, lul_device)
+
+            luup.variable_set(DIM_SID, "LoadLevelTarget", "100", lul_device)
+            luup.variable_set(DIM_SID, "LoadLevelStatus", "100", lul_device)
+      
+            return 0, "Comfort set"
+      
+        else
+            return -1,"Wrong value"
+      
+        end
+      
+      end
+      
+    function MemoriseLastStatus(target,status)
+        local NbTarget = tonumber(target)
+        local NbStatus = tonumber(status)
+        
+        if(NbTarget ~= nil and NbStatus ~= nil ) then   -- and NbTarget ~= NbStatus
+            luup.variable_set(PWITEM_SID, "Last Status", status, lul_device)
+        end
+
+    end
+    
+    function SetLevel(lul_device,value)
+    
+        
+        value = tonumber(value)
+        
+        if(value == 0 ) then
+           return SetTarget(lul_device,0)
+        elseif(value &gt; 0 and value &lt; 50 ) then
+           return SetTarget(lul_device,1) 
+        elseif(value &gt; 49  and value &lt; 75 ) then
+           return SetTarget(lul_device,2)  
+        elseif(value &gt; 74) then
+           return SetTarget(lul_device,3) 
+        else
+         return -1, "Wrong value"
+        end
+      
+    end
+    
+    function SetLastTarget(lul_device)
+        local data = readSettings(lul_device)
+        return SetTarget(lul_device,data.lastStatus) 
+    endl)
+      
+    function log(msg) 
+        luup.logPilotWireer : " .. msg)
+      end
+  </functions>
+  <startup>initItem</startup>
+  <actionList>
+    <action>
+        <serviceIurn:antor-fr:serviceId:PilotWire1r1</serviceId>
+        <name>SetTarget</name>
+        <job>
+            log("SetTarget called")
+            SetTarget(lul_device,lul_settings.newTargetValue)
+            return 4, 5
+        </job>
+    </actio
+    <action>
+        <serviceId>urn:antor-fr:serviceId:PilotWire1</serviceId>
+        <name>Sync</name>
+        <job>
+            log("Sync called")
+            sync(lul_device)
+            return 4, 5
+        </job>
+    </action>
+    <action>
+        <serviceId>urn:antor-fr:serviceId:PilotWire1</serviceId>
+        <name>SetLastTarget</name>
+        <job>
+            log("SetLastTarget called")
+            SetLastTarget(lul_device)
+            return 4, 5
+        </job>
+    </action>n>
+    <action>
+        <serviceId>urn:micasaverde-com:serviceId:HaDevice1</serviceId>
+        <name>Poll</name>
+        <job>
+            log("Poll called")
+            sync(lul_device)
+            return 4, 5
+        </job>
+    </action>
+    <action>
+        <serviceId>urn:upnp-org:serviceId:Dimming1</serviceId>
+        <name>SetLoadLevelTarget</name>
+        <job>
+            log("SetLoadLevelTarget called")
+            SetLevel(lul_device,lul_settings.newLoadlevelTarget)
+            return 4, 5
+        </job>
+    </action>
+  </actionList>
+</implementation>

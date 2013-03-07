@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>0</major>
+    <minor>1</minor>
+  </specVersion>
+  <device>
+    <deviceType>urn:antor-fr:device:PilotWire:1</deviceType>
+    <friendlyName>Pilote Wire</friendlyName>
+    <Category_Num>5</Category_Num>
+    <staticJson>D_PilotWire1.json</staticJson>
+    <serviceList>
+        <service>
+            <serviceType>urn:schemas-antor-fr:service:PilotWire:1</serviceType>
+            <serviceId>urn:antor-fr:serviceId:PilotWire1</serviceId>
+            <SCPDURL>S_PilotWire1.xml</SCPDURL>
+        </service>
+        <service>
+            <serviceType>urn:schemas-upnp-org:service:Dimming:1</serviceType>
+            <serviceId>urn:upnp-org:serviceId:Dimming1</serviceId>
+            <SCPDURL>S_Dimming1.xml</SCPDURL>
+        </service>
+        <service>
+            <serviceType>urn:schemas-micasaverde-com:service:HaDevice:1</serviceType>
+            <serviceId>urn:micasaverde-com:serviceId:HaDevice1</serviceId>
+            <SCPDURL>S_HaDevice1.xml</SCPDURL>
+        </service>
+    </serviceList>
+    <implementationList>
+      <implementationFile>I_PilotWire1.xml</implementationFile>
+    </implementationList>
+  <sceneList>
+{
+	"group_1":{
+		"cmd_1": 
+		{
+			"label": "Comfort",
+			"serviceId": "urn:antor-fr:serviceId:PilotWire1",
+			"action": "SetTarget",
+			"arguments":
+			{
+				"newTargetValue": "3"
+			}
+		},
+		"cmd_2": 
+		{
+			"label": "Shutdown",
+			"serviceId": "urn:antor-fr:serviceId:PilotWire1",
+			"action": "SetTarget",
+			"arguments":
+			{
+				"newTargetValue": "0"
+			}
+        },
+        "cmd_3": 
+        {
+            "label": "Economy",
+            "serviceId": "urn:antor-fr:serviceId:PilotWire1",
+            "action": "SetTarget",
+            "arguments":
+            {
+                "newTargetValue": "2"
+            }
+        },
+        "cmd_4": 
+        {
+            "label": "Frost Protection",
+            "serviceId": "urn:antor-fr:serviceId:PilotWire1",
+            "action": "SetTarget",
+            "arguments":
+            {
+                "newTargetValue": "1"
+            }
+        }
+	}
+}	
+	</sceneList>
+ 	<eventList>
+{
+	"event_1":{
+		"label": "A Electric Heating is turned",
+		"serviceId": "urn:antor-fr:serviceId:PilotWire1",
+		"argumentList" :
+		{
+			"argument_1" :
+			{
+				"dataType": "number",
+				"defaultValue": "3",
+				"allowedValueList" : 
+				{
+                    "Shutdown" : "0",
+                    "Frost Protection" : "1",
+                    "Economy" : "2",
+					"Comfort" : "3"
+				},
+				"name": "Status",
+				"comparisson": "=",
+				"prefix": "Which mode",
+				"suffix": ""
+			}
+		}
+	}
+}
+  </eventList>	
+  </device>
+</root>

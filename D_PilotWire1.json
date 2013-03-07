@@ -1,0 +1,351 @@
+{
+    "flashicon": "http://mios.antor.fr/Icons/PiloteWire.png",
+    "imgIconMin": "http://mios.antor.fr/Icons/PiloteWire_0.png",
+    "imgIconMax": "http://mios.antor.fr/Icons/PiloteWire_100.png",
+    "halloIconsDir": "pics/hallo",
+	"state_icons":[
+		"PiloteWire_0.png",
+		"PiloteWire_50.png",
+		"PiloteWire_75.png",
+		"PiloteWire_100.png"
+	],
+    "x": "2",
+    "y": "4",
+    "iconText": "0",
+    "inScene": "1",
+    "DisplayStatus": {
+        "Service": "urn:antor-fr:serviceId:PilotWire1",
+        "Variable": "Status",
+        "MinValue": "0",
+        "MaxValue": "3"
+    },
+    "doc_url": {
+        "doc_language": 1,
+        "doc_manual": 1,
+        "doc_version": 1,
+        "doc_platform": 0,
+        "doc_page": "pilotwire_devices"
+    },
+    "Tabs": [
+        {
+            "Label": {
+                "lang_tag": "tabname_control",
+                "text": "Control"
+            },
+            "Position": "0",
+            "TabType": "flash",
+            "ControlGroup": [
+                {
+                    "id": "1",
+                    "isSingle": "1",
+                    "scenegroup": "1"
+                },
+                {
+                    "id": "2",
+                    "isSingle": "1",
+                    "scenegroup": "1"
+                },
+                {
+                    "id": "3",
+                    "isSingle": "1",
+                    "scenegroup": "1"
+                },
+                {
+                    "id": "4",
+                    "isSingle": "1",
+                    "scenegroup": "1"
+                }
+            ],
+            "SceneGroup": [
+                {
+                    "id": "1",
+                    "top": "0.5",
+                    "left": "0",
+                    "x": "2",
+                    "y": "2.5"
+                }
+            ],
+            "Control": [
+                {
+                    "ControlGroup": "4",
+                    "ControlType": "button",
+                    "top": "0",
+                    "left": "1",
+                    "Label": {
+                        "lang_tag": "Comfort",
+                        "text": "Comfort"
+                    },
+                    "Display": {
+                        "Service": "urn:antor-fr:serviceId:PilotWire1",
+                        "Variable": "Status",
+                        "Value": "3",
+                        "Top": 50,
+                        "Left": 450,
+                        "Width": 75,
+                        "Height": 20
+                    },
+                    "Command": {
+                        "Service": "urn:antor-fr:serviceId:PilotWire1",
+                        "Action": "SetTarget",
+                        "Parameters": [
+                            {
+                                "Name": "newTargetValue",
+                                "Value": "3"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "ControlGroup": "3",
+                    "ControlType": "button",
+                    "top": "0",
+                    "left": "0",
+                    "Label": {
+                        "lang_tag": "Shutdown",
+                        "text": "Shutdown"
+                    },
+                    "Display": {
+                        "Service": "urn:antor-fr:serviceId:PilotWire1",
+                        "Variable": "Status",
+                        "Value": "0",
+                        "Top": 50,
+                        "Left": 50,
+                        "Width": 75,
+                        "Height": 20
+                    },
+                    "Command": {
+                        "Service": "urn:antor-fr:serviceId:PilotWire1",
+                        "Action": "SetTarget",
+                        "Parameters": [
+                            {
+                                "Name": "newTargetValue",
+                                "Value": "0"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "ControlGroup": "1",
+                    "ControlType": "button",
+                    "top": "1.5",
+                    "left": "0",
+                    "Label": {
+                        "lang_tag": "frost_free",
+                        "text": "frost free"
+                    },
+                    "Display": {
+                        "Service": "urn:antor-fr:serviceId:PilotWire1",
+                        "Variable": "Status",
+                        "Value": "1",
+                        "Top": 100,
+                        "Left": 50,
+                        "Width": 75,
+                        "Height": 20
+                    },
+                    "Command": {
+                        "Service": "urn:antor-fr:serviceId:PilotWire1",
+                        "Action": "SetTarget",
+                        "Parameters": [
+                            {
+                                "Name": "newTargetValue",
+                                "Value": "1"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "ControlGroup": "2",
+                    "ControlType": "button",
+                    "top": "1.5",
+                    "left": "1",
+                    "Label": {
+                        "lang_tag": "Economy",
+                        "text": "Economy"
+                    },
+                    "Display": {
+                        "Service": "urn:antor-fr:serviceId:PilotWire1",
+                        "Variable": "Status",
+                        "Value": "2",
+                        "Top": 100,
+                        "Left": 450,
+                        "Width": 75,
+                        "Height": 20
+                    },
+                    "Command": {
+                        "Service": "urn:antor-fr:serviceId:PilotWire1",
+                        "Action": "SetTarget",
+                        "Parameters": [
+                            {
+                                "Name": "newTargetValue",
+                                "Value": "2"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "Label": {
+                "lang_tag": "settings",
+                "text": "Settings"
+            },
+            "Position": "1",
+            "TabType": "javascript",
+            "ScriptName": "shared.js",
+            "Function": "simple_device"
+        },
+        {
+            "Label": {
+                "lang_tag": "advanced",
+                "text": "Advanced"
+            },
+            "Position": "2",
+            "TabType": "javascript",
+            "ScriptName": "shared.js",
+            "Function": "advanced_device"
+        },
+        {
+            "Label": {
+                "lang_tag": "device_options",
+                "text": "Device Options"
+            },
+            "Position": "3",
+            "TabType": "javascript",
+            "ScriptName": "shared.js",
+            "Function": "device_zwave_options"
+        },
+        {
+            "Label": {
+                "lang_tag": "logs",
+                "text": "Logs"
+            },
+            "Position": "4",
+            "TabType": "javascript",
+            "ScriptName": "shared.js",
+            "Function": "device_logs"
+        },
+        {
+            "Label": {
+                "lang_tag": "notifications",
+                "text": "Notifications"
+            },
+            "Position": "5",
+            "TabType": "javascript",
+            "ScriptName": "shared.js",
+            "Function": "device_notifications"
+        }
+    ],
+    "sceneList": {
+        "group_1": {
+            "cmd_1": {
+                "label": "Comfort",
+                "serviceId": "urn:antor-fr:serviceId:PilotWire1",
+                "action": "SetTarget",
+                "arguments": {
+                    "newTargetValue": "3"
+                },
+                "display": {
+                    "service": "urn:antor-fr:serviceId:PilotWire1",
+                    "variable": "Status",
+                    "value": "3"
+                }
+            },
+            "cmd_2": {
+                "label": "Shutdown",
+                "serviceId": "urn:antor-fr:serviceId:PilotWire1",
+                "action": "SetTarget",
+                "arguments": {
+                    "newTargetValue": "0"
+                },
+                "display": {
+                    "service": "urn:antor-fr:serviceId:PilotWire1",
+                    "variable": "Status",
+                    "value": "0"
+                }
+            },
+            "cmd_3": {
+                "label": "Economy",
+                "serviceId": "urn:antor-fr:serviceId:PilotWire1",
+                "action": "SetTarget",
+                "arguments": {
+                    "newTargetValue": "2"
+                },
+                "display": {
+                    "service": "urn:antor-fr:serviceId:PilotWire1",
+                    "variable": "Status",
+                    "value": "2"
+                }
+            },
+            "cmd_4": {
+                "label": "Frost Protection",
+                "serviceId": "urn:antor-fr:serviceId:PilotWire1",
+                "action": "SetTarget",
+                "arguments": {
+                    "newTargetValue": "1"
+                },
+                "display": {
+                    "service": "urn:antor-fr:serviceId:PilotWire1",
+                    "variable": "Status",
+                    "value": "1"
+                }
+            }
+            
+        }
+    },
+    "eventList2": [
+        {
+            "id": 1,
+            "label": {
+                "lang_tag": "a_electric_heating_is_turned",
+                "text": "A electric heating is turned"
+            },
+            "serviceId": "urn:antor-fr:serviceId:PilotWire1",
+            "argumentList": [
+                {
+                    "id": 1,
+                    "dataType": "number",
+                    "defaultValue": "3",
+                    "allowedValueList": [
+                        {
+                            "Shutdown": "0",
+                            "HumanFriendlyText": {
+                                "lang_tag": "hft_device_shutdown",
+                                "text": "_DEVICE_NAME_ is shutdown"
+                            }
+                        },
+                        {
+                            "Frost Protection": "1",
+                            "HumanFriendlyText": {
+                                "lang_tag": "hft_device_turned_Frost_Protection",
+                                "text": "_DEVICE_NAME_ is turned frost protection"
+                            }
+                        },
+                        {
+                            "Economy": "2",
+                            "HumanFriendlyText": {
+                                "lang_tag": "hft_device_turned_Economy",
+                                "text": "_DEVICE_NAME_ is turned economy"
+                            }
+                        },
+                        {
+                            "Comfort": "3",
+                            "HumanFriendlyText": {
+                                "lang_tag": "hft_device_turned_Comfort",
+                                "text": "_DEVICE_NAME_ is turned comfort"
+                            }
+                        }
+                    ],
+                    "name": "Status",
+                    "comparisson": "=",
+                    "prefix": {
+                        "lang_tag": "which_mode",
+                        "text": "Which mode"
+                    },
+                    "suffix": {}
+                }
+            ]
+        }
+    ],
+    "DeviceType": "urn:antor-fr:serviceId:PilotWire1",
+    "device_type": "urn:antor-fr:serviceId:PilotWire1"
+}
