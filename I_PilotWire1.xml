@@ -88,7 +88,7 @@
       end
       
 
-      function SetTarget(lul_device,value)
+    function SetTarget(lul_device,value)
       
         local data = readSettings(lul_device)
         local lul_resultcode, lul_resultstring
@@ -99,8 +99,8 @@
             local lul_resultcodeP = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 1}, data.SwitchPositive)
             local lul_resultcodeN = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 0}, data.SwitchNegative)
       
-            if (lul_resultcodeP == -1 or lul_resultcodeN) == -1 then
-                return -1,"Wrong value" then
+            if (lul_resultcodeP == -1 or lul_resultcodeN == -1) then
+                return -1,"Wrong value"
             end
             
             MemoriseLastStatus(value,data.status)            
@@ -117,8 +117,8 @@
             local lul_resultcodeP = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 0}, data.SwitchPositive)
             local lul_resultcodeN = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 1}, data.SwitchNegative)
       
-            if (lul_resultcodeP == -1 or lul_resultcodeN) == -1 then
-                return -1,"Wrong value" then
+            if (lul_resultcodeP == -1 or lul_resultcodeN == -1) then
+                return -1,"Wrong value"
             end
       
             MemoriseLastStatus(value,data.status)
@@ -135,8 +135,8 @@
             local lul_resultcodeP = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 1}, data.SwitchPositive)
             local lul_resultcodeN = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 1}, data.SwitchNegative)
       
-            if (lul_resultcodeP == -1 or lul_resultcodeN) == -1 then
-                return -1,"Wrong value" then
+            if (lul_resultcodeP == -1 or lul_resultcodeN == -1) then
+                return -1,"Wrong value"
             end
       
             MemoriseLastStatus(value,data.status)
@@ -153,8 +153,8 @@
             local lul_resultcodeP = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 0}, data.SwitchPositive)
             local lul_resultcodeN = luup.call_action(SWPOWER_SID, "SetTarget", {newTargetValue = 0}, data.SwitchNegative)
       
-            if (lul_resultcodeP == -1 or lul_resultcodeN) == -1 then
-                return -1,"Wrong value" then
+            if (lul_resultcodeP == -1 or lul_resultcodeN == -1) then
+                return -1,"Wrong value"
             end
       
             MemoriseLastStatus(value,data.status)
@@ -169,10 +169,9 @@
       
         else
             return -1,"Wrong value"
-      
         end
       
-      end
+    end
       
     function MemoriseLastStatus(target,status)
         local NbTarget = tonumber(target)
@@ -186,7 +185,6 @@
     
     function SetLevel(lul_device,value)
     
-        
         value = tonumber(value)
         
         if(value == 0 ) then
@@ -206,23 +204,23 @@
     function SetLastTarget(lul_device)
         local data = readSettings(lul_device)
         return SetTarget(lul_device,data.lastStatus) 
-    endl)
+    end
       
     function log(msg) 
-        luup.logPilotWireer : " .. msg)
+        luup.log("PilotWirer : " .. msg)
       end
   </functions>
   <startup>initItem</startup>
   <actionList>
     <action>
-        <serviceIurn:antor-fr:serviceId:PilotWire1r1</serviceId>
+        <serviceId>urn:antor-fr:serviceId:PilotWire1</serviceId>
         <name>SetTarget</name>
         <job>
             log("SetTarget called")
             SetTarget(lul_device,lul_settings.newTargetValue)
             return 4, 5
         </job>
-    </actio
+    </action>
     <action>
         <serviceId>urn:antor-fr:serviceId:PilotWire1</serviceId>
         <name>Sync</name>
