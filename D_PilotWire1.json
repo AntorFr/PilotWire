@@ -1,4 +1,5 @@
 {
+    "default_icon": "http://mios.antor.fr/Icons/PiloteWire.png",
     "flashicon": "http://mios.antor.fr/Icons/PiloteWire.png",
     "imgIconMin": "http://mios.antor.fr/Icons/PiloteWire_0.png",
     "imgIconMax": "http://mios.antor.fr/Icons/PiloteWire_100.png",
@@ -186,40 +187,20 @@
         },
         {
             "Label": {
-                "lang_tag": "settings",
-                "text": "Settings"
-            },
-            "Position": "1",
-            "TabType": "javascript",
-            "ScriptName": "shared.js",
-            "Function": "simple_device"
-        },
-        {
-            "Label": {
                 "lang_tag": "advanced",
                 "text": "Advanced"
             },
-            "Position": "2",
+            "Position": "1",
             "TabType": "javascript",
             "ScriptName": "shared.js",
             "Function": "advanced_device"
         },
         {
             "Label": {
-                "lang_tag": "device_options",
-                "text": "Device Options"
-            },
-            "Position": "3",
-            "TabType": "javascript",
-            "ScriptName": "shared.js",
-            "Function": "device_zwave_options"
-        },
-        {
-            "Label": {
                 "lang_tag": "logs",
                 "text": "Logs"
             },
-            "Position": "4",
+            "Position": "2",
             "TabType": "javascript",
             "ScriptName": "shared.js",
             "Function": "device_logs"
@@ -229,7 +210,7 @@
                 "lang_tag": "notifications",
                 "text": "Notifications"
             },
-            "Position": "5",
+            "Position": "3",
             "TabType": "javascript",
             "ScriptName": "shared.js",
             "Function": "device_notifications"
@@ -346,6 +327,6 @@
             ]
         }
     ],
-    "DeviceType": "urn:antor-fr:serviceId:PilotWire1",
-    "device_type": "urn:antor-fr:serviceId:PilotWire1"
+    "DeviceType": "urn:antor-fr:device:PilotWire:1",
+    "device_type": "urn:antor-fr:device:PilotWire:1"
 }
